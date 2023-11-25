@@ -5,6 +5,7 @@ from flask import (
 )
 from forms import CpfForm
 import os
+import re
 
 
 def create_app():
@@ -45,15 +46,18 @@ def create_app():
     @app.route("/", methods=["GET", "POST"])
     def index():
         cpf = None
+        erro = None
         form = CpfForm()
         if request.form.get("Recalcular"):
             return render_template(
                 "index.html", title="Calculadora de CPF", cpf=None, form=form
             )
         if form.validate_on_submit():
-            cpf = calcular_digitos_verificadores(form.cpf.data)
+            if len(form.cpf.data) == 9:
+                cpf = calcular_digitos_verificadores(form.cpf.data)
+                cpf = re.sub(r'(.{3})(.{3})(.{3})', r'\1.\2.\3-', cpf)
         return render_template(
-            "index.html", title="Calculadora de CPF", cpf=cpf, form=form
+            "index.html", title="Calculadora de CPF", cpf=cpf, form=form, erro=erro
         )
 
     return app
