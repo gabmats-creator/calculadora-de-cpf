@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField, IntegerField, DateField, PasswordField, SelectField
-from wtforms.validators import InputRequired, NumberRange, Email, Length, EqualTo
+from wtforms import StringField, SubmitField
+from wtforms.validators import InputRequired
 
 class CpfForm(FlaskForm):
     cpf = StringField("Informe o CPF", validators=[InputRequired(message="Esse campo é obrigatório")])

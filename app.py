@@ -1,12 +1,11 @@
-from flask import Flask, render_template, url_for, request, session, redirect, flash, current_app
-from dataclasses import asdict
+from flask import (
+    Flask,
+    render_template,
+    request,
+)
 from forms import CpfForm
-from pymongo import MongoClient
-from passlib.hash import pbkdf2_sha256
-from datetime import datetime
-import uuid
-import functools
 import os
+
 
 def create_app():
     app = Flask(__name__)
@@ -43,15 +42,18 @@ def create_app():
 
         return cpf_completo
 
-
     @app.route("/", methods=["GET", "POST"])
     def index():
         cpf = None
         form = CpfForm()
         if request.form.get("Recalcular"):
-            return render_template('index.html', title="Calculadora de CPF", cpf=None, form=form)
+            return render_template(
+                "index.html", title="Calculadora de CPF", cpf=None, form=form
+            )
         if form.validate_on_submit():
             cpf = calcular_digitos_verificadores(form.cpf.data)
-        return render_template('index.html', title="Calculadora de CPF", cpf=cpf, form=form)
-    
+        return render_template(
+            "index.html", title="Calculadora de CPF", cpf=cpf, form=form
+        )
+
     return app
