@@ -17,31 +17,30 @@ def create_app():
     def calcular_digitos_verificadores(cpf_base):
         # Calcula o primeiro dígito verificador
         soma = 0
-        peso = 10
-        for digito in cpf_base:
-            soma += int(digito) * peso
-            peso -= 1
+        pesos = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        cpf = list(cpf_base)
+        for i in range(len(pesos)):
+            print(pesos[i], cpf[i])
+            soma += pesos[i] * int(cpf[i])
 
         resto = soma % 11
-        primeiro_digito = 0 if resto < 2 else 11 - resto
+        primeiro_digito = resto if resto < 10 else 0
 
         # Adiciona o primeiro dígito verificador ao CPF base
-        cpf_base += str(primeiro_digito)
-
+        cpf.append(str(primeiro_digito))
         # Calcula o segundo dígito verificador
         soma = 0
-        peso = 11
-        for digito in cpf_base:
-            soma += int(digito) * peso
-            peso -= 1
+        pesos.insert(0, 0)
+        for i in range(len(pesos)):
+            print(pesos[i], cpf[i])
+            soma += pesos[i] * int(cpf[i])
 
         resto = soma % 11
-        segundo_digito = 0 if resto < 2 else 11 - resto
+        segundo_digito = resto if resto < 10 else 0
 
         # Adiciona o segundo dígito verificador ao CPF completo
-        cpf_completo = cpf_base + str(segundo_digito)
-
-        return cpf_completo
+        cpf.append(str(segundo_digito))
+        return ''.join(cpf)
 
     @app.route("/", methods=["GET", "POST"])
     def index():
