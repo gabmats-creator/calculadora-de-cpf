@@ -19,6 +19,9 @@
 
             <div class="form__container">
                 {{ form.hidden_tag() }}
+                {% if erro %}
+                    <p style="color: red;">{{ erro }}</p>
+                {% endif %}
                 {{ render_text_field(form.cpf, placeholder="CPF") }}
                 <div>
                     {{ form.submit(class_="button button--form") }}

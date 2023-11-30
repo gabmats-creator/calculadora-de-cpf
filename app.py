@@ -14,6 +14,12 @@ def create_app():
         "SECRET_KEY", "pf9Wkove4IKEAXvy-cQkeDPhv9Cb3Ag-wyJILbq_dFz"
     )
 
+    def validate_cpf(cpf):
+        if "." in cpf:
+            cpf = cpf.replace(".", "")
+        if len(cpf) == 9:
+            return cpf
+
     def calcular_digitos_verificadores(cpf_base):
         # Calcula o primeiro dígito verificador
         soma = 0
@@ -52,9 +58,13 @@ def create_app():
                 "index.html", title="Calculadora de CPF", cpf=None, form=form
             )
         if form.validate_on_submit():
-            if len(form.cpf.data) == 9:
-                cpf = calcular_digitos_verificadores(form.cpf.data)
+            cpf = form.cpf.data
+            cpf = validate_cpf(cpf)
+            if cpf:
+                cpf = calcular_digitos_verificadores(cpf)
                 cpf = re.sub(r'(.{3})(.{3})(.{3})', r'\1.\2.\3-', cpf)
+            else:
+                erro = "Por favor, insira apenas os 9 primeiros dígitos do seu cpf"
         return render_template(
             "index.html", title="Calculadora de CPF", cpf=cpf, form=form, erro=erro
         )
